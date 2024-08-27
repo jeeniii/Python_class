@@ -113,3 +113,21 @@ person['키'] = 162
 print(person['키'])
 person.update({'이름': '예인', '무게': 42})
 print(person['이름'], person['무게'])
+# person.pop('무게')
+# print(person)
+print(person.keys())
+print(person.items())
+
+# 튜플 수정 방법 (튜플을 리스트로 바꾸고 다시 튜플로 바꾸기)
+my_tuple = ('Yes', 'No')
+my_list = list(my_tuple)
+my_list.append('Mid')
+my_tuple = tuple(my_list)
+print(my_tuple)
+
+# 리스트를 Dict로
+print(my_list)
+my_dict = dict.fromkeys(my_list)
+my_list = list(my_dict)
+print(my_list)
+print(my_dict)
