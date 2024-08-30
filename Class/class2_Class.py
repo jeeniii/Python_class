@@ -3,13 +3,13 @@ class BlackBox:
         self.name = name
         self.price = price
 
-# class TravelBlackBox:
-#     def __init__(self, name, price):
-#         self.name = name
-#         self.price = price
+class TravelBlackBox:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
     
-#     def set_travel_mode(self, min):
-#         print(f'{self.name} {min}분 걸림')
+    def set_travel_mode(self, min):
+        print(f'{self.name} {min}분 걸림')
 
 # class TravelBlackBox(BlackBox):
 #     # self.name, price를 상속으로 가져오기
@@ -59,4 +59,11 @@ b5 = TravelBlackBox444('ddd',2000, 444)
 print(b5.name, b5.price, b5.sd)
 b5.make()
 b5.send()
-    
+
+
+# Reset
+class AdvancedTravelBlackBox(TravelBlackBox):
+    def set_travel_mode(self, min):
+        print(str(min)+'에게겍게')
+        self.make()
+        self.send()
