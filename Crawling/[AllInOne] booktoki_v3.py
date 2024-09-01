@@ -28,7 +28,7 @@ class Downloader_Booktoki(Downloader):
     def read(self):
         soup = get_soup(self.url)
         artist = self.get_artist(soup)
-        title = f"[{artist}] {self.get_title(soup)} 全"
+        base_title = f"[{artist}] {self.get_title(soup)}"
         self.artist = artist
 
         img_candidate = soup.find("div", class_="view-img").find("img")
@@ -37,25 +37,24 @@ class Downloader_Booktoki(Downloader):
             img = Image(src, "cover")
             self.urls.append(img.url)
 
-        content_titles = []
-        contents = []
-
         pages = get_pages_list(soup)
         self.print_(pages)
+        
+        # 각 소설 하나 당 파일 생성
         for n, page in enumerate(pages):
-            self.title = f"{title} ({n+1}/{len(pages)})"
+            # 각 소설의 제목을 정의
+            self.title = f"{base_title} ({n+1}/{len(pages)})"
             self.print_(f"Reading: {n+1}/{len(pages)}")
             pagesoup = get_soup(page)
-
+            
+            # 콘텐츠 및 제목 가져오기
             @try_n(4)
             def content_getter():
                 try:
                     return get_content(pagesoup)
                 except:
                     return get_content(get_soup(page))
-
-            contents.append(content_getter().replace("&nbsp;", "\n"))
-
+            
             @try_n(4)
             def title_getter():
                 try:
@@ -63,24 +62,25 @@ class Downloader_Booktoki(Downloader):
                 except:
                     return f"{n+1}화 | {get_page_title(get_soup(page))}"
 
-            content_titles.append(title_getter())
-
-        full_content = ""
-        for n in range(len(content_titles)):
-            full_content += content_titles[n]
+            # 개별 소설의 제목과 내용을 결합
+            content_title = title_getter()
+            content = content_getter().replace("&nbsp;", "\n")
+            
+            full_content = ""
+            full_content += content_title
             full_content += "\n\n"
-            full_content += contents[n]
-            full_content += "\n\n\n"
-        full_content += "終"
+            full_content += content
+            full_content += "\n\n\n終"
 
-        f = BytesIO()
-        f.write(full_content.encode("UTF-8"))
-        f.seek(0)
+            # 개별 파일로 저장
+            f = BytesIO()
+            f.write(full_content.encode("UTF-8"))
+            f.seek(0)
 
-        self.filenames[f] = title + ".txt"
-        self.urls.append(f)
-
-        self.title = title
+            # 각 소설에 대한 파일명 설정
+            novel_title = clean_title(content_title)  # 파일명에 적합한 형식으로 정리
+            self.filenames[f] = f"{novel_title}.txt"
+            self.urls.append(f)
 
     def get_info_list(self, soup: Soup) -> list:
         """-> [title, [platform, tags, artist], summary]"""
