@@ -1,27 +1,27 @@
 import pandas as pd
 import numpy as np
 
-credits_data = pd.read_csv('C:\\Python\\Python_Class\\MachineLearning\\tmdb_5000\\tmdb_5000_credits.csv')
-movies_data = pd.read_csv('C:\\Python\\Python_Class\\MachineLearning\\tmdb_5000\\tmdb_5000_movies.csv')
+df1 = pd.read_csv('C:\\Python\\Python_Class\\MachineLearning\\tmdb_5000\\tmdb_5000_credits.csv')
+df2 = pd.read_csv('C:\\Python\\Python_Class\\MachineLearning\\tmdb_5000\\tmdb_5000_movies.csv')
 
-# print(credits_data.head())
-# print(credits_data[:3])
+# print(df1.head())
+# print(df1[:3])
 
-print(credits_data.shape)
-print(movies_data.shape)
+print(df1.shape)
+print(df2.shape)
 
-print(credits_data['title'].equals(movies_data['title']))
-print(credits_data.columns) 
-credits_data.columns = ['id', 'title', 'cast', 'crew']
-print(credits_data.columns)
-print(movies_data.columns)
+print(df1['title'].equals(df2['title']))
+print(df1.columns) 
+df1.columns = ['id', 'title', 'cast', 'crew']
+print(df1.columns)
+print(df2.columns)
 
-C = movies_data['vote_average'].mean()
+C = df2['vote_average'].mean()
 # print(C)
-m = movies_data['vote_count'].quantile(0.9)
+m = df2['vote_count'].quantile(0.9)
 # print(m)
 
-q_movies = movies_data.copy().loc[movies_data['vote_count'] >= m ]
+q_movies = df2.copy().loc[df2['vote_count'] >= m ]
 print(q_movies.shape)
 q_movies['vote_count'].sort_values()
 print(q_movies['vote_count'])
